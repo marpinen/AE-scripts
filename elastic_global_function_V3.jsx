@@ -2,7 +2,7 @@
 // The script first adds slider controls to the current layer for controlling the elastic motion.
 // Then checks if "Global" and "elastic expression master" layers exists. If not, creates them.
 // The Global layer contains the elastic function in the marker comment in frame 1.
-// The "elastic expression master" layer controls the global elastic settings. If the layer does not exist, layer uses local value.
+// The "elastic expression master" layer controls the global elastic settings. If the layer does not exist, then uses local value.
 
 
 // Create script undo group
