@@ -4,6 +4,10 @@
 // The Global layer contains the elastic function in the marker comment in frame 1.
 // The "elastic expression master" layer controls the global elastic settings. If the layer does not exist, layer uses local value.
 
+
+// Create script undo group
+app.beginUndoGroup("Elastic motion");
+
 // Add properties to current layer
 // Get current layer
 var currentLayer = app.project.activeItem.selectedLayers[0];
@@ -113,3 +117,5 @@ if (app.project.activeItem.layer("Global") == null){
     myNull.enabled = false;
     myNull.locked = true;
 }
+
+app.endUndoGroup();
