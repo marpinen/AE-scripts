@@ -1,5 +1,7 @@
 
-// This AE script creates and links a null to each puppet pin on a selected layer 
+// This AE script is for easier puppet animation.
+// It creates a null for each puppet pin on the selected layer and links them.
+// Not very tested.
 
 // Create script undo group
 app.beginUndoGroup("Puppet pins to nulls");
@@ -22,6 +24,10 @@ if(myComp != null){
         // Get the first selected layer
         var myLayer = selectedLayers[0];
 
+        // Get the current rotation and scale of myLayer
+        var myLrotation = myLayer.property("Transform").property("Rotation").value;
+        var myLscale = myLayer.property("Transform").property("Scale").value;
+
         // Get the Puppet effect
         var puppetEffect = myLayer.effect("Puppet");
 
@@ -37,19 +43,24 @@ if(myComp != null){
                 
                 // Check if the Puppet Pin exists
                 if(puppetPin != null){
-                    var puppetPos = puppetPin.position.value;
-                    var anchor = myLayer.transform.anchorPoint.value;
-                    var posi = myLayer.transform.position.value;
 
-                    // Calculate the position
-                    var pos = [posi[0] + puppetPos[0] - anchor[0], posi[1] + puppetPos[1] - anchor[1]];
+                    // Reset rotation and scale values of myLayer before operation
+                    myLayer.property("Transform").property("Rotation").setValue(0);
+                    myLayer.property("Transform").property("Scale").setValue([100, 100, 100]);
+
+                    // Calculate the position (toComp and fromComp way would be more elegant)
+                    var puppetPos = puppetPin.position.value;
+                    var myLanchor = myLayer.transform.anchorPoint.value;
+                    var myLpos = myLayer.transform.position.value;
+                    var pos = [myLpos[0] + puppetPos[0] - myLanchor[0], myLpos[1] + puppetPos[1] - myLanchor[1]];
 
                     // Create a new null layer at the calculated position
                     var myNull = myComp.layers.addNull();
-                    myNull.name = "Puppet Pin " + i + " Null";
+                    myNull.name = myLayer.name + " Pin " + i;
                     myNull.transform.position.setValue(pos);
                     myNull.source.width = 70;
                     myNull.source.height = 70;
+                    myNull.moveBefore(myLayer);
 
                     // Set the anchor point of the null to its center
                     myNull.transform.anchorPoint.setValue([myNull.source.width/2,myNull.source.height/2]);
@@ -62,6 +73,13 @@ if(myComp != null){
                     expr += "nullpos=n.toComp(n.anchorPoint);\n";
                     expr += "fromComp(nullpos);";
                     puppetPin.position.expression = expr;
+
+                    // Link null to myLayer
+                    myNull.parent = myLayer; 
+
+                    // Set original rotation and scale values back to myLayer
+                    myLayer.property("Transform").property("Rotation").setValue(myLrotation);
+                    myLayer.property("Transform").property("Scale").setValue(myLscale);
                 }
             }
         } else {
