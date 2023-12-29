@@ -23,7 +23,7 @@ if(myComp != null){
     // Get the selected layers
     var selectedLayers = myComp.selectedLayers;
     
-    // Check if a layer is selected
+    // Check if three layers are selected
     if(selectedLayers.length == 3){
         // Selected layers for the operations
         var swordLayer = selectedLayers[0];
