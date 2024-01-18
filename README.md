@@ -1,2 +1,2 @@
 # AE-scripts
-After Effects scripts
+After Effects scripts (JS/ExtendScript)
